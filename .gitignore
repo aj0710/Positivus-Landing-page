@@ -1,0 +1,64 @@
+# Operating System Files
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# Editor and IDE Files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sublime-project
+*.sublime-workspace
+
+# VS Code (ignore workspace state, keep configuration if desired)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Node & Package Managers (for future tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+
+# Build & Bundler Outputs
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+
+# Local Environment & Logs
+*.log
+.env
+.env.local
+.env.*.local
+
+# AI & Temporary Assistant Files
+.agents/
+.gemini/
