@@ -17,7 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!drawer) return;
     drawer.classList.add("active");
     backdrop.classList.add("active");
-    menuBtn.setAttribute("aria-expanded", "true");
+    if (menuBtn) {
+      menuBtn.classList.add("active");
+      menuBtn.setAttribute("aria-expanded", "true");
+    }
     drawer.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
   }
@@ -26,7 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!drawer) return;
     drawer.classList.remove("active");
     backdrop.classList.remove("active");
-    menuBtn.setAttribute("aria-expanded", "false");
+    if (menuBtn) {
+      menuBtn.classList.remove("active");
+      menuBtn.setAttribute("aria-expanded", "false");
+    }
     drawer.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
   }
@@ -124,9 +130,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const dots = dotsContainer.querySelectorAll(".carousel-dot");
 
     function updateCarousel() {
-      // Calculate translate percentage
+      // Calculate translate percentage with 3D hardware acceleration for mobile/tablet/desktop
       const offset = currentIndex * 100;
-      track.style.transform = `translateX(-${offset}%)`;
+      track.style.transform = `translate3d(-${offset}%, 0, 0)`;
 
       // Update dots
       dots.forEach((dot, idx) => {
@@ -267,5 +273,76 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
       }
     });
+  }
+
+  /* ==========================================================================
+     6. Normal Scroll Reveal & Entrance Animations
+     ========================================================================== */
+  document.documentElement.classList.add("reveal-ready");
+
+  const revealTargets = [
+    { selector: ".card-section-1", stagger: false },
+    { selector: ".service-cards", stagger: true },
+    { selector: ".cta-block", stagger: false },
+    { selector: ".case-studies-block", stagger: false },
+    { selector: ".accordion-item", stagger: true },
+    { selector: ".team-card-box", stagger: true },
+    { selector: ".team-btn", stagger: false },
+    { selector: ".testimonials-block", stagger: false },
+    { selector: ".contact-section", stagger: false },
+  ];
+
+  if ("IntersectionObserver" in window) {
+    const isMobileOrTablet = window.innerWidth <= 1024;
+    const observerOptions = {
+      root: null,
+      threshold: isMobileOrTablet ? 0.05 : 0.12,
+      rootMargin: isMobileOrTablet ? "0px 0px -20px 0px" : "0px 0px -40px 0px",
+    };
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    revealTargets.forEach((group) => {
+      const elements = document.querySelectorAll(group.selector);
+      elements.forEach((el, index) => {
+        el.classList.add("reveal");
+        if (group.stagger) {
+          const delay = isMobileOrTablet ? 0.06 : 0.08;
+          el.style.transitionDelay = `${(index % 6) * delay}s`;
+        }
+        revealObserver.observe(el);
+      });
+    });
+  } else {
+    document
+      .querySelectorAll(
+        ".card-section-1, .service-cards, .cta-block, .case-studies-block, .accordion-item, .team-card-box, .testimonials-block, .contact-section"
+      )
+      .forEach((el) => el.classList.add("is-visible"));
+  }
+
+  /* ==========================================================================
+     7. Sticky Navbar Animation on Scroll
+     ========================================================================== */
+  const navbar = document.querySelector(".navbar");
+  if (navbar) {
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (window.scrollY > 40) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      },
+      { passive: true }
+    );
   }
 });

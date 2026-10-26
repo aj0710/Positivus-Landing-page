@@ -193,14 +193,15 @@ ul {
 .menu-btn {
   display: none;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 44px;
   height: 44px;
-  padding: 10px;
+  padding: 12px 9px;
   border-radius: 8px;
   z-index: 102;
   cursor: pointer;
   background-color: transparent;
+  transition: var(--transition-smooth);
 }
 
 .hamburger-line {
@@ -209,7 +210,24 @@ ul {
   height: 2.5px;
   background-color: var(--dark-color);
   border-radius: 2px;
-  transition: var(--transition-smooth);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s ease,
+              background-color 0.25s ease;
+  transform-origin: center;
+}
+
+/* Animated Hamburger to X */
+.menu-btn.active .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-btn.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.menu-btn.active .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* Mobile Drawer & Backdrop */
@@ -276,6 +294,25 @@ ul {
   gap: 1.25rem;
   margin-top: 2rem;
 }
+
+/* Staggered Entrance Animation for Drawer Links on Mobile/Tablet */
+.mobile-nav-links li {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-drawer.active .mobile-nav-links li {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.mobile-drawer.active .mobile-nav-links li:nth-child(1) { transition-delay: 0.08s; }
+.mobile-drawer.active .mobile-nav-links li:nth-child(2) { transition-delay: 0.13s; }
+.mobile-drawer.active .mobile-nav-links li:nth-child(3) { transition-delay: 0.18s; }
+.mobile-drawer.active .mobile-nav-links li:nth-child(4) { transition-delay: 0.23s; }
+.mobile-drawer.active .mobile-nav-links li:nth-child(5) { transition-delay: 0.28s; }
+.mobile-drawer.active .mobile-nav-links li:nth-child(6) { transition-delay: 0.33s; }
 
 .mobile-nav-links li a:not(.mobile-nav-btn) {
   display: block;
@@ -1740,5 +1777,199 @@ ul {
 
   .hero-title {
     font-size: 2rem;
+  }
+}
+
+/* ==========================================================================
+   Smooth Normal Animations & Motion Design System (Mobile, Tablet, Desktop)
+   ========================================================================== */
+
+/* 1. Progressive Scroll Reveal */
+.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-ready .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 2. Hero Section Entrance Animation */
+@keyframes heroFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroIllustrationEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.hero-title-container {
+  animation: heroFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-section-right {
+  animation: heroIllustrationEnter 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.hero-para {
+  animation: heroFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.hero-btn {
+  animation: heroFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+/* 3. Subtle Gentle Float Keyframe for Graphics */
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hero-section-right img {
+  animation: gentleFloat 6s ease-in-out infinite 1.2s;
+}
+
+.cta-right-img img {
+  animation: gentleFloat 5.5s ease-in-out infinite 0.6s;
+}
+
+/* 4. Sticky Navbar Animation */
+.navbar {
+  position: sticky;
+  top: 0;
+  transition: padding 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+  padding-block: 0.85rem;
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* 5. Tactile Touch & Click States across Mobile, Tablet, Desktop */
+.hero-btn:active,
+.cta-btn:active,
+.nav-btn:active,
+.mobile-nav-btn:active,
+.contact-submit-btn:active,
+.team-all-btn:active {
+  transform: scale(0.97) translateY(0);
+}
+
+/* 6. Accordion Icon Rotation */
+.process-icon-wrap {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.35s ease;
+}
+
+.accordion-item.is-open .process-icon-wrap {
+  transform: rotate(180deg);
+}
+
+/* 7. Desktop-Specific Hover Animations (Mouse/Pointer) */
+@media (hover: hover) and (pointer: fine) {
+  .service-cards {
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .service-cards:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .service-card-right-container img {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .service-cards:hover .service-card-right-container img {
+    transform: scale(1.05);
+  }
+
+  .team-card-box {
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .team-card-box:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .team-card-box:hover .team-img-wrap img {
+    transform: scale(1.06);
+  }
+
+  .linkdin-icon:hover {
+    transform: scale(1.15) rotate(6deg);
+  }
+}
+
+/* 8. Mobile & Tablet Specific Animation Tuning */
+@media (max-width: 1024px) {
+  /* Snappier scroll reveal with reduced travel distance for mobile/tablet */
+  .reveal-ready .reveal {
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .service-cards:active,
+  .team-card-box:active {
+    transform: scale(0.99);
+  }
+
+  .navbar.scrolled {
+    padding-block: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .reveal-ready .reveal {
+    transform: translateY(16px);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* 9. Accessibility: Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-ready .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
